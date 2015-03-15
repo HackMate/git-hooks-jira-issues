@@ -1,0 +1,28 @@
+#!/bin/bash
+
+KEY_IS_MISSING=198
+KEY_IS_AVAILABLE=0
+
+parse_issue_key_from_file() {
+    grep -oP "^[A-Z]+[A-Z0-9_]*-[0-9]*" $1
+}
+
+check_commit_message_for_jira_key () {
+    jira_issue=`parse_issue_key_from_file $1`
+
+    # If the jira_issue is empty.
+    if [ -z "$jira_issue" ]; then
+        echo "commit-msg: Aborting commit due to missing issue key"
+        return $KEY_IS_MISSING
+    else
+        return $KEY_IS_AVAILABLE
+    fi
+}
+
+# Only Export the functions, in case the running script is not this script and there are no parameters.
+if [[ $_ != $0 && $# == 0 ]]; then
+  export -f check_commit_message_for_jira_key
+else
+  check_commit_message_for_jira_key "${@}"
+  exit $?
+fi
