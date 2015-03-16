@@ -13,3 +13,9 @@ fi
 
 source $tmp_file
 
+# This allows us to overload functions dynamicly.
+# mock_function "test" "echo 'test'" -> will create/overload any function "test" with the body "echo 'test'".
+function mock_function() {
+    func="function $1() { $2; }"
+    eval "$func"
+}
