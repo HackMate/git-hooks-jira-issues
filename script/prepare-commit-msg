@@ -11,21 +11,28 @@ branch_name() {
     git rev-parse --abbrev-ref HEAD
 }
 
-prepare_commit_msg () {
-    issue_temp_file=$1
+prepare_commit_msg() {
     current_branch=`branch_name`
     issue_key=`parse_issue_key $current_branch`
 
-    # Add the comment to the first line.
-    sed -i -e "1i$issue_key " $issue_temp_file
+    # If there is an issue_key.
+    if ! [ -z "$issue_key" ]; then
+        echo "$issue_key: $1"
+    else
+        echo "$1"
+    fi
 }
 
+prepare_commit_msg_from_file () {
+    commit_message=`cat $1`
+    echo $(prepare_commit_msg $commit_message) > $1
+}
 
 # Only Export the functions, in case the running script is not this script and there are no parameters.
 if [[ $_ != $0 && $# == 0 ]]; then
   export -f parse_issue_key
   export -f prepare_commit_msg
 else
-  prepare_commit_msg "${@}"
+  prepare_commit_msg_from_file "${@}"
   exit $?
 fi

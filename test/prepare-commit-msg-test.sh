@@ -21,4 +21,14 @@ assert "parse_issue_key valid_FD-100"                       "FD-100"
 skip_if "! git --version"
 assert "branch_name"    "master"
 
+# On a valid branch_name, add it as prefix, without changing the message.
+mock_function "branch_name" "echo 'ID-12345'"
+assert "prepare_commit_msg '# just a comment'" "ID-12345: # just a comment"
+
+# On an invalid branch_name, return the input message untouched.
+mock_function "branch_name" "echo 'invalid_branch_name'"
+assert "prepare_commit_msg '# just a comment'" "# just a comment"
+assert "prepare_commit_msg '# line1\n# line2'" "# line1\n# line2"
+
+
 assert_end $0
