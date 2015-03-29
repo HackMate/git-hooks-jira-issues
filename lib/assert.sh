@@ -19,3 +19,8 @@ function mock_function() {
     func="function $1() { $2; }"
     eval "$func"
 }
+
+function create_tmp_file() {
+    echo "$1" > /tmp/test_file.tmp
+    echo "/tmp/test_file.tmp"
+}

@@ -17,15 +17,9 @@ prepare_commit_msg() {
 
     # If there is an issue_key.
     if ! [ -z "$issue_key" ]; then
-        echo "$issue_key: $1"
-    else
-        echo "$1"
+        echo -n "${issue_key} " | cat - $1 > $1.tmp && mv $1.tmp $1
+        rm -rf $1.tmp
     fi
-}
-
-prepare_commit_msg_from_file () {
-    commit_message=`cat $1`
-    echo $(prepare_commit_msg $commit_message) > $1
 }
 
 # Only Export the functions, in case the running script is not this script and there are no parameters.
@@ -33,6 +27,6 @@ if [[ $_ != $0 && $# == 0 ]]; then
   export -f parse_issue_key
   export -f prepare_commit_msg
 else
-  prepare_commit_msg_from_file "${@}"
+  prepare_commit_msg "${@}"
   exit $?
 fi

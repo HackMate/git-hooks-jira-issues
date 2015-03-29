@@ -9,8 +9,9 @@ source ../script/prepare-commit-msg
 #       the valid part.
 
 assert "parse_issue_key invalid_commit_msg_without_issue"   ""
-assert "parse_issue_key valid_MY_EXAMPLE_PROJECT-9999"      "MY_EXAMPLE_PROJECT-9999"
-assert "parse_issue_key invalid_2013PROJECT-200"            "PROJECT-200"
+assert "parse_issue_key prefix/MY_EXAMPLE_PROJECT-9999"     "MY_EXAMPLE_PROJECT-9999"
+assert "parse_issue_key PROJECT-200-postfix"                "PROJECT-200"
+assert "parse_issue_key 2013PROJECT-200"                    "PROJECT-200"
 assert "parse_issue_key valid_PRODUCT_2013-234"             "PRODUCT_2013-234"
 assert "parse_issue_key invalid_loCA-200"                   "CA-200"
 assert "parse_issue_key valid_R2D2-876"                     "R2D2-876"
@@ -23,12 +24,16 @@ assert "branch_name"    "master"
 
 # On a valid branch_name, add it as prefix, without changing the message.
 mock_function "branch_name" "echo 'ID-12345'"
-assert "prepare_commit_msg '# just a comment'" "ID-12345: # just a comment"
+file_input=$(create_tmp_file "# just a comment")
+assert "prepare_commit_msg $file_input && cat $file_input" "ID-12345 # just a comment"
 
 # On an invalid branch_name, return the input message untouched.
 mock_function "branch_name" "echo 'invalid_branch_name'"
-assert "prepare_commit_msg '# just a comment'" "# just a comment"
-assert "prepare_commit_msg '# line1\n# line2'" "# line1\n# line2"
+file_input=$(create_tmp_file "# just a comment")
+assert "prepare_commit_msg $file_input && cat $file_input" "# just a comment"
+file_input=$(create_tmp_file "# line1
+# line2")
+assert "prepare_commit_msg $file_input && cat $file_input" "# line1\n# line2"
 
 
 assert_end $0
