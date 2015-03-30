@@ -8,7 +8,11 @@ assert_sh_src=https://raw.github.com/lehmannro/assert.sh/v1.1/assert.sh
 tmp_file="/tmp/assert.sh"
 if ! [ -f $tmp_file ]; then
     echo "Loading assert.sh to $tmp_file"
-    curl -sSL $assert_sh_src > $tmp_file
+    if command -v curl > /dev/null; then
+      curl -sSL $assert_sh_src > $tmp_file
+    else
+      wget -q -P /tmp/ $assert_sh_src
+    fi
 fi
 
 source $tmp_file
