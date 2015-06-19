@@ -4,7 +4,7 @@ KEY_IS_MISSING=198
 KEY_IS_AVAILABLE=0
 
 parse_issue_key_from_file() {
-    grep -oP "^[A-Z]+[A-Z0-9_]*-[0-9]*" $1
+    cat $1 | perl -n -e '/^([A-Z]+[A-Z0-9_]+-[0-9]+)/ && print $1'
 }
 
 check_commit_message_for_jira_key () {
