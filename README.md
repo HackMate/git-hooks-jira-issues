@@ -10,7 +10,7 @@ This project provides two hooks:
 0. [commit-msg:](script/commit-msg) This hook, will reject all commit messages that do not contain a JIRA issue key with the [default format](https://confluence.atlassian.com/display/JIRA/Changing+the+Project+Key+Format).
 
 
-Currently both hooks have been tested on Debian like systems, as well as on Windows with git-bash. Both hooks still need some work (see TODOs).
+Currently both hooks have been tested on Debian like systems, as well as on Windows with git-bash. Both hooks have some minor issues (see TODOs).
 
 Installation
 ------------
@@ -36,4 +36,5 @@ Notes:
 
 TODO
 ----
-* prepare-commit-msg: Issues should not be added to merge-commits.
+* Make hooks handle the first commit on an empty repository.
+* Make hooks optionally configurable to ignore certain branches (master, develop etc.)
