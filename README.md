@@ -23,7 +23,7 @@ Go to your git-repository and use the following commands to download the commit-
 The following will do the same for the prepare-commit-msg hook:
 
     wget -P .git/hooks/ https://raw.github.com/HackMate/git-hooks-jira-issues/master/script/prepare-commit-msg && \
-    chmod -v u+x .git/hooks/commit-msg
+    chmod -v u+x .git/hooks/prepare-commit-msg
 
 
 
